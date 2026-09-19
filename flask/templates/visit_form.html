@@ -1,0 +1,12 @@
+{%- extends "base.html" -%}
+{%- import "_macros.html" as render -%}
+{% block title %}Visit Form{% endblock %}
+{% block heading %}Visit Form{% endblock %}
+{% block body %}
+<div class="note"><b>Generated page</b>
+This template was not part of the model's answer — the route existed and the
+page did not. It renders exactly the values <code>visit_form.html</code> passes, so the
+routing and the data are the original work and only the presentation is added.</div>
+<h2>Cities</h2>
+{{ render.show(cities) }}
+{% endblock %}
