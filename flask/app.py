@@ -54,8 +54,16 @@ def new_visit():
             flash(f"Visit saved with QA status {visit['qa_status']}.", "success")
             return redirect(url_for("visit_detail", visit_id=visit["id"]))
         except (VisitValidationError, EvidenceError) as exc:
+            # `if filename` is load-bearing. receipt_filename starts as "" and
+            # stays "" when save_evidence raises before assigning it, and
+            # UPLOAD_DIR / "" is UPLOAD_DIR - so the cleanup unlinked the
+            # evidence DIRECTORY and died with IsADirectoryError. That fired on
+            # every rejected submission, turning a form validation message into
+            # a 500. Found 2026-09-20 once evidence.py existed to reject
+            # anything.
             for filename in [receipt_filename, *photo_filenames]:
-                (UPLOAD_DIR / filename).unlink(missing_ok=True)
+                if filename:
+                    (UPLOAD_DIR / filename).unlink(missing_ok=True)
             flash(str(exc), "error")
 
     return render_template("visit_form.html", cities=TARGET_CITIES)

@@ -6,3 +6,7 @@ venv/
 .env
 *.log
 .DS_Store
+
+# Runtime database and uploaded evidence, written at run time.
+flask/data/*.db
+flask/data/evidence/
